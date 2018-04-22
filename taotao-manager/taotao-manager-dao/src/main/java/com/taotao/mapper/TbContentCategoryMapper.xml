@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taotao.mapper.TbContentCategoryMapper" >
+  <resultMap id="BaseResultMap" type="com.taotao.pojo.TbContentCategory" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+    <result column="is_parent" property="isParent" jdbcType="BIT" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, parent_id, name, status, sort_order, is_parent, created, updated
+  </sql>
+  <select id="selectContentCategory" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from tb_content_category
+  	where parent_id=#{parentId}
+  </select>
+  <insert id="insert" parameterType="com.taotao.pojo.TbContentCategory">
+  	<selectKey keyProperty="id" resultType="Long" order="AFTER">
+  		select last_insert_id()
+  	</selectKey>
+  	insert into tb_content_category(id, parent_id, name, status, sort_order, is_parent, created, updated)
+  	values(#{id},#{parentId},#{name},#{status},#{sortOrder},#{isParent},#{created},#{updated})
+  </insert>
+  <select id="selectByPrimaryKey" parameterType="Long" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from tb_content_category
+  	where
+  	id=#{id}
+  </select>
+  <update id="updateByPrimaryKey" parameterType="com.taotao.pojo.TbContentCategory">
+  	update tb_content_category set 
+  	parent_id=#{parentId},name=#{name},status=#{status},sort_order=#{sortOrder},is_parent=#{isParent},created=#{created},updated=#{updated}
+  	where id=#{id}
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.taotao.pojo.TbContentCategory">
+  	update tb_content_category
+  	<set>
+  		<if test="parentId != null">
+  			parent_id=#{parentId},
+  		</if>
+  		<if test="name != null">
+  			name=#{name},
+  		</if>
+  		<if test="status != null">
+  			status=#{status},
+  		</if>
+  		<if test="sortOrder != null">
+  			sort_order=#{sortOrder},
+  		</if>
+  		<if test="isParent != null">
+  			is_parent=#{isParent},
+  		</if>
+  		<if test="created != null">
+  			created=#{created},
+  		</if>
+  		<if test="updated != null">
+  			updated=#{updated}
+  		</if>
+  	</set>
+  	where id=#{id}
+  </update>
+  <delete id="delContentCategoryByPrimaryKey" parameterType="Long">
+  	delete from tb_content_category where id=#{id}
+  </delete>
+</mapper>
